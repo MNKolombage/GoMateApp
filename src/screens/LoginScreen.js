@@ -31,7 +31,23 @@ export default function LoginScreen({ navigation }) {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      // First, try DummyJSON API authentication
+      // First check local registered users before trying API
+      const userByEmailStr = await AsyncStorage.getItem(`user_${values.email}`);
+      const userByEmail = userByEmailStr ? JSON.parse(userByEmailStr) : null;
+      
+      const registeredUserStr = await AsyncStorage.getItem('registeredUser');
+      const registeredUser = registeredUserStr ? JSON.parse(registeredUserStr) : null;
+      
+      // If local user found, use it directly (no API call needed)
+      if (userByEmail || registeredUser) {
+        const user = userByEmail || registeredUser;
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+        dispatch(loginSuccess({ user }));
+        setSubmitting(false);
+        return;
+      }
+      
+      // Only try DummyJSON API if no local user exists
       const username = values.email.includes('@') ? values.email.split('@')[0] : values.email;
       const apiResult = await loginUser(username, values.password);
       
@@ -50,20 +66,7 @@ export default function LoginScreen({ navigation }) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
         await AsyncStorage.setItem(`user_${apiResult.user.email}`, JSON.stringify(user));
         dispatch(loginSuccess({ user }));
-        return;
-      }
-      
-      // Fallback: Check local registered users
-      const userByEmailStr = await AsyncStorage.getItem(`user_${values.email}`);
-      const userByEmail = userByEmailStr ? JSON.parse(userByEmailStr) : null;
-      
-      const registeredUserStr = await AsyncStorage.getItem('registeredUser');
-      const registeredUser = registeredUserStr ? JSON.parse(registeredUserStr) : null;
-      
-      if (userByEmail || registeredUser) {
-        const user = userByEmail || registeredUser;
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        dispatch(loginSuccess({ user }));
+        setSubmitting(false);
         return;
       }
       
