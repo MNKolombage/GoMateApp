@@ -1,14 +1,40 @@
 # GoMate - Travel & Transport App
 
-A React Native mobile application for viewing public transport schedules and exploring destinations.
+A React Native mobile application for viewing public transport schedules and exploring destinations with **real API integration**.
 
 ## Features
 
-- **Transport Routes**: Browse bus, train, and ferry routes with real-time schedules
+- **Transport Routes**: Browse bus, train, and ferry routes with search and sorting
 - **Destinations**: Explore tourist destinations with ratings and distances
 - **Favorites**: Save your favorite routes and destinations
-- **User Authentication**: Login and registration with Redux state management
-- **Pull to Refresh**: Update transport data with a simple pull gesture
+- **User Authentication**: Login with DummyJSON API or register locally
+- **Dark Mode**: Full dark mode support across all screens
+- **Pull to Refresh**: Update transport data from APIs with a simple pull gesture
+- **API Integration**: Uses free public APIs (DummyJSON & JSONPlaceholder)
+
+## API Integration ✅
+
+This app uses **free dummy APIs** as per assignment requirements:
+
+### 1. Authentication API - DummyJSON
+
+- **URL:** https://dummyjson.com/docs/auth
+- **Usage:** User login, token management, user data
+- **Test Credentials:**
+  - Username: `emilys` | Password: `emilyspass`
+  - Username: `michaelw` | Password: `michaelwpass`
+
+### 2. Data Fetching APIs
+
+- **DummyJSON Products:** For transport routes (https://dummyjson.com/products)
+- **JSONPlaceholder Photos:** For destinations (https://jsonplaceholder.typicode.com/photos)
+
+### 3. Fallback Mechanism
+
+- If APIs are unavailable, app uses demo data automatically
+- No configuration needed - works out of the box!
+
+**📖 See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for detailed API information**
 
 ## Setup Instructions
 
@@ -18,25 +44,7 @@ A React Native mobile application for viewing public transport schedules and exp
 npm install
 ```
 
-### 2. Configure TransportAPI (Optional)
-
-This app is configured to work with [TransportAPI](https://developer.transportapi.com/) for real transport data.
-
-#### To get API credentials:
-
-1. Visit [https://developer.transportapi.com/](https://developer.transportapi.com/)
-2. Sign up for a free account (1000 requests/day)
-3. Get your `app_id` and `app_key`
-4. Open `src/services/api.js`
-5. Replace the placeholder values:
-   ```javascript
-   const TRANSPORT_API_KEY = "your_actual_api_key";
-   const TRANSPORT_APP_ID = "your_actual_app_id";
-   ```
-
-**Note**: The app works with demo data if you don't configure the API keys.
-
-### 3. Run the App
+### 2. Run the App
 
 ```bash
 npx expo start
@@ -47,6 +55,23 @@ Then:
 - Press `a` for Android
 - Press `i` for iOS
 - Scan QR code with Expo Go app
+
+### 3. Test the App
+
+#### Login with DummyJSON API:
+
+- Username: `emilys`
+- Password: `emilyspass`
+
+Or register a new account locally!
+
+#### Browse Data:
+
+- Routes are fetched from DummyJSON Products API
+- Destinations are fetched from JSONPlaceholder Photos API
+- Pull down to refresh and fetch new data
+
+**No API keys needed!** All APIs are free and public.
 
 ## Project Structure
 
@@ -76,27 +101,28 @@ src/
 
 ## TransportAPI Integration
 
-The app includes helper functions for TransportAPI in `src/services/transportService.js`:
+The app now uses **free public dummy APIs** instead of TransportAPI to comply with assignment requirements:
 
-- `getNearbyStops(lat, lon, radius)` - Find bus stops and train stations
-- `getLiveBusDepartures(atcocode)` - Get real-time bus departures
-- `getTrainDepartures(stationCode)` - Get train station departures
-- `planJourney(from, to)` - Plan multi-modal journeys
+### Current API Implementation:
 
-### Example Usage:
+- **Authentication:** DummyJSON Auth API (https://dummyjson.com/docs/auth)
+- **Transport Routes:** DummyJSON Products API (transformed into routes)
+- **Destinations:** JSONPlaceholder Photos API (transformed into destinations)
 
-```javascript
-import { getLiveBusDepartures } from "../services/transportService";
+### How it works:
 
-const departures = await getLiveBusDepartures("490000235W");
-```
+1. **Login:** Real API authentication via DummyJSON
+2. **Data Fetching:** Routes and destinations fetched from public APIs
+3. **Fallback:** If APIs fail, app uses local demo data
+4. **No Setup Required:** All APIs are free and don't need API keys
 
-## Demo Data
+### API Service Files:
 
-Without API keys, the app uses demo data with:
+- `src/services/api.js` - Axios configuration for all APIs
+- `src/services/authService.js` - Authentication methods using DummyJSON
+- `src/services/transportService.js` - Data fetching with API integration
 
-- 6 sample transport routes (buses, shuttles, ferry)
-- 6 sample destinations (beaches, mountains, historical sites)
+See `API_DOCUMENTATION.md` for detailed API usage and endpoints.
 
 ## Technologies Used
 
@@ -109,13 +135,21 @@ Without API keys, the app uses demo data with:
 
 ## Assignment Requirements Met
 
-✅ User Authentication (login/register with React Hooks)  
-✅ Navigation Structure (Stack & Bottom Tab navigation)  
-✅ Home Screen (Dynamic item list from API)  
-✅ Item Interaction (Details screen with state management)  
-✅ Favorites (Mark items as favorites with Redux)  
-✅ Styling & UI (Consistent design with Feather/Ionicons)  
-✅ API Integration (TransportAPI.com for travel data)
+✅ **User Authentication** (DummyJSON API - login/register with React Hooks)  
+✅ **API Integration** (DummyJSON & JSONPlaceholder for data fetching)  
+✅ **Navigation Structure** (Stack & Bottom Tab navigation)  
+✅ **Home Screen** (Dynamic item list from API with search & sort)  
+✅ **Item Interaction** (Details screen with state management)  
+✅ **Favorites** (Mark items as favorites with Redux)  
+✅ **Styling & UI** (Consistent design with dark mode support)  
+✅ **Dummy APIs** (Free public APIs - no keys required)  
+✅ **Error Handling** (Fallback to demo data if APIs fail)
+
+### APIs Used (Assignment Compliant):
+
+- **DummyJSON** (https://dummyjson.com) - Authentication & mock transport data
+- **JSONPlaceholder** (https://jsonplaceholder.typicode.com) - Mock destination data
+- **No API Keys Required** - All free, public APIs
 
 ## Development
 

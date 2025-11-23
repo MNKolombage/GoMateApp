@@ -1,31 +1,53 @@
 // src/services/api.js
 import axios from 'axios';
 
-// TransportAPI configuration
-// Sign up at https://developer.transportapi.com/ to get API keys
-// Free tier provides 1000 requests per day
+/**
+ * API Configuration using Free Public APIs
+ * Assignment compliant with dummy APIs for authentication and data fetching
+ */
 
-const TRANSPORT_API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
-const TRANSPORT_APP_ID = 'YOUR_APP_ID_HERE'; // Replace with your actual app ID
-
-const transportApi = axios.create({
-  baseURL: 'https://transportapi.com/v3/uk',
+// 1. DummyJSON API - For user authentication and mock data
+// Documentation: https://dummyjson.com/docs
+const dummyApi = axios.create({
+  baseURL: 'https://dummyjson.com',
   timeout: 10000,
-  params: {
-    app_id: TRANSPORT_APP_ID,
-    app_key: TRANSPORT_API_KEY,
+  headers: {
+    'Content-Type': 'application/json',
   }
 });
 
-// Fallback API for demo purposes when TransportAPI key is not configured
-const demoApi = axios.create({
-  baseURL: 'https://dummyjson.com',
-  timeout: 5000,
+// 2. JSONPlaceholder - For additional mock transport/destination data
+const jsonPlaceholderApi = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  timeout: 10000,
 });
 
-// Export the appropriate API instance
-const api = TRANSPORT_API_KEY !== 'YOUR_API_KEY_HERE' ? transportApi : demoApi;
+// 3. Mock Transport API - Using free public API for transport-like data
+const mockTransportApi = axios.create({
+  baseURL: 'https://dummyjson.com',
+  timeout: 10000,
+});
 
-export default api;
-export { demoApi, transportApi };
+// Add request interceptor to include auth token if available
+dummyApi.interceptors.request.use(
+  (config) => {
+    // You can add token here if needed
+    // const token = AsyncStorage.getItem('authToken');
+    // if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add response interceptor for error handling
+dummyApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.message);
+    return Promise.reject(error);
+  }
+);
+
+export default dummyApi;
+export { dummyApi, jsonPlaceholderApi, mockTransportApi };
 
