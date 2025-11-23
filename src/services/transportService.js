@@ -1,5 +1,5 @@
 // src/services/transportService.js
-import { dummyApi, jsonPlaceholderApi } from './api';
+import { dummyApi } from './api';
 
 /**
  * Transport Service using Free Public APIs
@@ -63,52 +63,13 @@ export const getRoutes = async () => {
 };
 
 /**
- * Fetch tourist destinations from DummyJSON Posts API
- * Maps posts to destinations for demo purposes
+ * Fetch tourist destinations - Using demo data with actual Sri Lankan images
+ * API integration available but demo data has better matching images
  */
 export const getDestinations = async () => {
-  try {
-    // Using JSONPlaceholder photos API as mock destination data
-    const response = await jsonPlaceholderApi.get('/photos?_limit=10');
-    
-    const destinations = response.data.map((photo, index) => {
-      const categories = ['Beach', 'Mountain', 'Historical', 'Wildlife', 'Temple'];
-      const names = [
-        'Sigiriya Rock Fortress',
-        'Temple of the Tooth',
-        'Galle Fort',
-        'Yala National Park',
-        'Mirissa Beach',
-        'Horton Plains',
-        'Ella Rock',
-        'Pinnawala Elephant Orphanage',
-        'Arugam Bay',
-        'Adam\'s Peak'
-      ];
-      
-      return {
-        id: photo.id,
-        name: names[index % names.length],
-        description: photo.title || 'Explore this beautiful Sri Lankan destination with rich culture and natural beauty.',
-        category: categories[index % categories.length],
-        rating: (4.0 + (index * 0.1)).toFixed(1),
-        distance: `${(index + 1) * 15} km`,
-        thumbnail: photo.url,
-        hours: index % 2 === 0 ? '24 hours' : '6:00 AM - 6:00 PM',
-        price: `Rs. ${(index + 1) * 500}`,
-        coordinates: {
-          latitude: 6.9271 + (index * 0.5),
-          longitude: 79.8612 + (index * 0.3)
-        }
-      };
-    });
-    
-    return destinations;
-  } catch (error) {
-    console.error('Error fetching destinations from API:', error.message);
-    // Fallback to demo data if API fails
-    return getDemoDestinations();
-  }
+  // Using demo data for better image accuracy
+  // DummyJSON products don't have Sri Lankan destination images
+  return getDemoDestinations();
 };
 
 /**

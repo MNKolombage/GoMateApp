@@ -32,13 +32,20 @@ export default function HomeScreen({ navigation }) {
       const routeData = await getRoutes();
       const destData = await getDestinations();
       
+      console.log('Routes fetched:', routeData?.length);
+      console.log('Destinations fetched:', destData?.length);
+      console.log('First destination thumbnail:', destData?.[0]?.thumbnail);
+      
       setRoutes(routeData);
       setDestinations(destData);
     } catch (err) {
       console.error('Error fetching data:', err);
       // Use demo data as ultimate fallback
-      setRoutes(getDemoRoutes());
-      setDestinations(getDemoDestinations());
+      const demoRoutes = getDemoRoutes();
+      const demoDestinations = getDemoDestinations();
+      console.log('Using demo data - Destinations:', demoDestinations?.length);
+      setRoutes(demoRoutes);
+      setDestinations(demoDestinations);
     } finally {
       setLoading(false);
       setRefreshing(false);
