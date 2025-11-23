@@ -1,16 +1,15 @@
 // src/navigation/index.js
-import React from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import DetailsScreen from '../screens/DetailsScreen';
 import FavouritesScreen from '../screens/FavouritesScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import { useSelector } from 'react-redux';
-import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,23 +35,20 @@ function MainTabs() {
 
 export default function AppNavigation() {
   const auth = useSelector(state => state.auth); // expects auth slice
-  const themeMode = useSelector(state => state.theme.mode); // expects theme slice
 
   return (
-    <NavigationContainer theme={themeMode === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        {!auth.isLoggedIn ? (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator>
+      {!auth.isLoggedIn ? (
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="Details" component={DetailsScreen} />
+        </>
+      )}
+    </Stack.Navigator>
   );
 }
